@@ -12,6 +12,6 @@ popd
 
 pushd src
 
-DDE_BACKEND=tensorflow python poisson/deeponet_poisson.py
+DDE_BACKEND=tensorflow python poisson/deeponet_poisson_16.py
 
 popd
