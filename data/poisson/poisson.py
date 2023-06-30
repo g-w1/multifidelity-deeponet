@@ -12,7 +12,7 @@ def solver(f, N):
     """
     h = 1 / (N - 1)
     K = -2 * np.eye(N - 2) + np.eye(N - 2, k=1) + np.eye(N - 2, k=-1)
-    b = h ** 2 * 20 * f[1:-1]
+    b = h**2 * 20 * f[1:-1]
     u = np.linalg.solve(K, b)
     u = np.concatenate(([0], u, [0]))
     return u
@@ -69,7 +69,12 @@ def gen_data():
     y_low = np.array(y_low)
     y_low_x = np.array(y_low_x)
     np.savez_compressed(
-        "../data/train.npz", X0=sensor_values, X1=x, y=y, y_low=y_low, y_low_x=y_low_x
+        "../poisson_train.npz",
+        X0=sensor_values,
+        X1=x,
+        y=y,
+        y_low=y_low,
+        y_low_x=y_low_x,
     )
 
     # for i in range(5):

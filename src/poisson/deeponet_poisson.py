@@ -20,7 +20,7 @@ def get_data(
     if stacktrunk:
         X_trunk = np.hstack((d["X1"][idx], d["y_low_x"][idx]))
     X_train = (X_branch, X_trunk)
-    y_train = d["y"][idx]
+    y_train = d["y"][idx].astype(np.float32)
     if residual:
         y_train -= d["y_low_x"][idx]
 
@@ -28,11 +28,11 @@ def get_data(
     X_branch = d["X0"]
     X_trunk = d["X1"]
     if stackbranch:
-        X_branch = np.hstack((d["X0"], d["y_low"]))
+        X_branch = np.hstack((d["X0"], d["y_low"])).astype(np.float32)
     if stacktrunk:
-        X_trunk = np.hstack((d["X1"], d["y_low_x"]))
+        X_trunk = np.hstack((d["X1"], d["y_low_x"])).astype(np.float32)
     X_test = (X_branch, X_trunk)
-    y_test = d["y"]
+    y_test = d["y"].astype(np.float32)
     if residual:
         y_test -= d["y_low_x"]
     return X_train, y_train, X_test, y_test
@@ -46,19 +46,19 @@ def run(data, net, lr, epochs):
 
 
 def main():
-    fname_train = "../data/train.npz"
-    fname_test = "../data/test.npz"
+    fname_train = "../data/poisson_train.npz"
+    fname_test = "../data/poisson_train.npz"
     X_train, y_train, X_test, y_test = get_data(
         fname_train, fname_test, residual=True, stackbranch=False, stacktrunk=False
     )
-    data = dde.data.OpDataSet(
+    data = dde.data.Triple(
         X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test
     )
 
     m = 100
     dim_x = 1
     width = 5
-    net = dde.maps.OpNN(
+    net = dde.nn.DeepONetCartesianProd(
         [m, width, width],
         [dim_x, width],
         "selu",
